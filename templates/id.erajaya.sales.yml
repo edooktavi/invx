@@ -1,0 +1,91 @@
+issuer: ERA
+keywords:
+    - ERAFONE
+fields:
+    sales_name: Kasir\s+:\s*(.*)
+    invoice_number: No\. Faktur\s+:\s*(.*)
+    date: Tanggal\s+:\s+(\d{1,2}\-\d{1,2}\-\d{4})
+    customer: Customer\s+:\s*(.*)
+    material:
+        parser: regex
+        start: STATUS MEMBER
+        end: Total item
+        regex:
+        - \b(?!2200|8100133992|8100002311|8100127684)\d{10}\b
+        multiple: true
+#    quantity:
+#        start: STATUS MEMBER\s+:\s*(.*)
+#        end: Total item
+#        regex: '(\d+)\s+Pcs'
+#        type: int
+#        parser: custom
+#        multiple: true
+    amount:
+        parser: regex
+        start: STATUS MEMBER
+        end: Total Item
+        regex: '\d{1,3}(?:\.\d{3})*(?:,\d{2})\s+((?!0,00)\d{1,3}(?:\.\d{3})*(?:,\d{2}))'
+        post_process: first
+        multiple: true
+    sn:
+        parser: regex
+        start: STATUS MEMBER
+        end: Total item
+        regex: "Serial number:\\s*(.*(?:\\n\\s*(?:\\d+/[A-Z0-9]+|\\d{15}))*).*"
+        post_process: split
+        split: "\\n\\s*"
+    
+    payment_method:
+    - (?i)(CASH)
+    - (?i)(BCA - DEBIT BCA)
+    - (?i)(BCA - BCA CARD)
+    - (?i)(MANDIRI - DEBIT)
+    - (?i)(MANDIRI - VISA DEBIT)
+    - (?i)(CIMB - DEBIT CIMB)
+    - (?i)(BNI - DEBIT BNI)
+    - (?i)(BRI - DEBIT OTHER)
+    - (?i)(BRI - DEBIT BRI)
+    - (?i)(BCA - QRIS)
+    - (?i)(BRI - QRIS)
+    - (?i)(MANDIRI - QRIS)
+    - (?i)(BRI REGULAR OFF US)
+    - (?i)(BRI - JENIUS)
+    - (?i)(BRI REGULAR ON US)
+    - (?i)(FIN - KREDIT PLUS)
+    - (?i)(FIN - SPEKTRA)
+    - (?i)(FIN - AKULAKU)
+    - (?i)(FIN - KREDIVO H2H)
+    - (?i)(VOUCHER ERASPACE POINT)
+    - (?i)(VOUCHER GIFTCARD)
+    - (?i)(VOUCHER CAPILLARY)
+    - (?i)(BCA - 0%)
+    - (?i)(BRI - 0%)
+    - (?i)(BNI - 0%)
+    - (?i)(CIMB - 0%)
+    - (?i)(MANDIRI - 0%)
+    - (?i)(MANDIRI - UOB)
+    - (?i)(MANDIRI - DIGIBANK)
+    - (?i)(MANDIRI - JENIUS)
+    - (?i)(MANDIRI - HCBC)
+    - (?i)(MANDIRI - DBS)
+    - (?i)(MANDIRI - MAYBANK)
+    - (?i)(MANDIRI - DANAMON)
+    - (?i)(MANDIRI - OCBC NISP)
+    - (?i)(RETURN)
+    - (?i)(CLICK AND PICKUP)
+    - (?i)(FIN - SHOPEE PAY)
+    - (?i)(Fin - SPayLater Limit Xtra)
+    - (?i)(FIN - SPAYLATER)
+    - (?i)(TRADE IN - ENB)
+    - (?i)(BCA PAYLATER - QRIS)
+    - (?i)(ALL BANK REGULAR)
+    - (?i)(POINT ERACLUB)
+    - (?i)(VOUCHER ERACLUB POINT)
+    grand_total: Grand Total\s+:\s*(.*)
+#    grand_total: Grand Total\s+:\s+(\d+(?:\.\d+)?)
+
+
+options:
+    currency: IDR
+    date_formats:
+    - '%d-%m-%Y'
